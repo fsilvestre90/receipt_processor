@@ -4,7 +4,6 @@ version = "1.0.0"
 description = ""
 authors = ["Filipe Silvestre"]
 readme = ""
-packages = [{ include = "processor", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "=3.11.4"
