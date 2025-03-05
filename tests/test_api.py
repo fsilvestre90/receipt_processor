@@ -8,16 +8,14 @@ def submit_receipt(data):
     url = f"{BASE_URL}/receipts/process"
     headers = {"Content-Type": "application/json"}
     response = requests.post(url, headers=headers, json=data)
-    response.raise_for_status()
 
-    return response.json()
+    return response
 
 def get_points(receipt_id: str):
     """Helper function to send a GET request."""
     response = requests.get(f"{BASE_URL}/receipts/{receipt_id}/points")
-    response.raise_for_status()
 
-    return response.json()
+    return response
 
 @pytest.mark.parametrize(
     "receipt_data, expected",
@@ -59,13 +57,27 @@ def get_points(receipt_id: str):
     ],
 )
 def test_receipt_calculation(receipt_data, expected):
-    submit_response = submit_receipt(receipt_data)
+    submit_response = submit_receipt(receipt_data).json()
     assert submit_response
 
     receipt_id = submit_response["id"]
     assert receipt_id
 
-    points_response = get_points(receipt_id)
+    points_response = get_points(receipt_id).json()
     assert points_response
 
     assert points_response["points"] == expected
+
+
+@pytest.mark.parametrize(
+    "receipt_data, expected_status",
+    [
+        ({"retailer": "", "purchaseDate": "2022-03-20", "purchaseTime": "14:33", "items": [], "total": "9.00"}, 422),
+        ({"retailer": "Test Store", "purchaseDate": "invalid-date", "purchaseTime": "14:33", "items": [], "total": "9.00"}, 422),
+        ({"retailer": "Test Store", "purchaseDate": "2022-03-20", "purchaseTime": "14:33", "items": [], "total": "not-a-number"}, 422),
+        ({}, 422)
+    ]
+)
+def test_invalid_receipt_submission(receipt_data, expected_status):
+    response = submit_receipt(receipt_data)
+    assert response.status_code == expected_status

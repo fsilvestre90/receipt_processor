@@ -1,16 +1,16 @@
-from typing import List, Optional
-
-from pydantic import BaseModel
+from typing import List
+from datetime import datetime, time
+from pydantic import BaseModel, Field
 
 
 class Item(BaseModel):
     shortDescription: str
-    price: float
+    price: float 
 
 
 class Receipt(BaseModel):
-    retailer: str
-    purchaseDate: str
-    purchaseTime: str
+    retailer: str = Field(min_length=1, max_length=100)
+    purchaseDate: datetime
+    purchaseTime: time
     items: List[Item]
     total: float

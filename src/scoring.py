@@ -48,13 +48,12 @@ def calculate_description_points(receipt: Receipt) -> int:
 
 def calculate_odd_day_points(receipt: Receipt) -> int:
     """Award 6 points if the purchase date is an odd day."""
-    return 6 if datetime.strptime(receipt.purchaseDate, "%Y-%m-%d").day % 2 == 1 else 0
+    return 6 if receipt.purchaseDate.day % 2 == 1 else 0
 
 
 def calculate_time_based_points(receipt: Receipt) -> int:
     """Award 10 points if the purchase time is between TIME_BASED_START and TIME_BASED_END."""
-    purchase_time = datetime.strptime(receipt.purchaseTime, "%H:%M").time()
-    return 10 if TIME_BASED_START < purchase_time < TIME_BASED_END else 0
+    return 10 if TIME_BASED_START < receipt.purchaseTime < TIME_BASED_END else 0
 
 
 DEFAULT_SCORING_FUNCTIONS: ScoringFunctions = [
