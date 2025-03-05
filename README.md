@@ -11,12 +11,20 @@ This project integrates **FastAPI** for API development, **Celery** for distribu
 
 ## 🔧 Setup & Usage  
 
-**Build & Start** all services:  
+**Build & Start all services**:  
    ```bash
       docker-compose up --build
    ```
 
-**Submit receipt** curl request
+**Run Integration tests**:
+Ensure all dependent containers are running first then run the integration tests container  
+   ```bash
+      docker-compose up -d
+      docker-compose up integration_tests
+   ```
+
+
+**Submit receipt curl request** 
 ```bash
 curl -X POST "http://localhost:8080/receipts/process" \
      -H "Content-Type: application/json" \
@@ -50,7 +58,7 @@ curl -X POST "http://localhost:8080/receipts/process" \
      }'
 ```
 
-**Check points** curl request
+**Check points curl request**
 ```bash
 curl -X GET "http://localhost:8080/receipts/RECEIPT_ID/points" \
      -H "Accept: application/json"
