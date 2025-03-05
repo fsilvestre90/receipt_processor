@@ -52,6 +52,6 @@ curl -X POST "http://localhost:8080/receipts/process" \
 
 **Check points** curl request
 ```bash
-curl -X GET "http://localhost:8080/receipts/86d3879e-b6bc-464e-951d-9320f7721912/points" \
+curl -X GET "http://localhost:8080/receipts/RECEIPT_ID/points" \
      -H "Accept: application/json"
 ```

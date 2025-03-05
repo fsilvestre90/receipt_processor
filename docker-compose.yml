@@ -17,6 +17,21 @@ services:
       - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
     restart: always
 
+  integration_tests:
+    container_name: integration_tests
+    build: .
+    command: bash -c "pytest test_api.py"
+    volumes:
+      - ./tests/:/app
+    depends_on:
+      - app
+      - redis
+      - celery_worker
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
+
   redis:
     container_name: redis
     image: redis:7.2.4-alpine
